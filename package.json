@@ -1,0 +1,21 @@
+{
+  "name": "snip",
+  "version": "0.1.0",
+  "description": "A URL shortener with a live analytics dashboard.",
+  "type": "commonjs",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "dotenv": "^17.4.2",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.3"
+  },
+  "devDependencies": {
+    "vitest": "^4.1.10"
+  }
+}
