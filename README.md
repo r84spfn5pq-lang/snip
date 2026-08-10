@@ -9,7 +9,7 @@ Built as the flagship project for a software-job study plan — each phase below
 
 - [x] Phase 0 — skeleton: submit a URL, get a short code, redirect route, no auth yet
 - [x] Phase 1 — tests for the short-code generator and URL validator (`npm test`)
-- [ ] Phase 2 — CI running those tests on every push (needs a GitHub repo)
+- [x] Phase 2 — CI running those tests on every push via GitHub Actions
 - [ ] Phase 3 — Docker + docker-compose (app + Postgres + Redis) (needs Docker Desktop installed)
 - [x] Phase 4 — real accounts (bcryptjs + JWT), links tied to their owner
 - [ ] Phase 5 — live click counter via Socket.io
