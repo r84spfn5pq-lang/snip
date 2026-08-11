@@ -11,11 +11,23 @@ const store = require("./lib/store");
 const users = require("./lib/users");
 const { hashPassword, comparePassword, signToken } = require("./lib/auth");
 const { requireAuth } = require("./lib/authMiddleware");
+const redis = require("./lib/redisClient");
+const { clicksQueue } = require("./lib/queue");
+
+const CACHE_TTL_SECONDS = 60 * 60;
 
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 const PORT = process.env.PORT || 4141;
+
+// A separate connection is required because a Redis client in "subscribe mode"
+// can't also run normal GET/SET commands.
+const subscriber = redis.duplicate();
+subscriber.subscribe("linkClicked");
+subscriber.on("message", (channel, message) => {
+  io.emit("linkClicked", JSON.parse(message));
+});
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
@@ -68,7 +80,7 @@ app.get("/api/links", requireAuth, (req, res) => {
   res.json(store.getLinksByOwner(req.userId));
 });
 
-app.post("/api/links", requireAuth, (req, res) => {
+app.post("/api/links", requireAuth, async (req, res) => {
   const { url } = req.body;
 
   if (!isValidUrl(url)) {
@@ -77,19 +89,27 @@ app.post("/api/links", requireAuth, (req, res) => {
 
   const code = generateUniqueCode();
   const link = store.addLink(code, url, req.userId);
+  await redis.set(`link:${code}`, link.url, "EX", CACHE_TTL_SECONDS);
   res.status(201).json(link);
 });
 
-app.get("/:code", (req, res) => {
-  const link = store.getLink(req.params.code);
+app.get("/:code", async (req, res) => {
+  const code = req.params.code;
 
-  if (!link) {
-    return res.status(404).send("No link found for that code.");
+  let destination = await redis.get(`link:${code}`);
+
+  if (!destination) {
+    const link = store.getLink(code);
+    if (!link) {
+      return res.status(404).send("No link found for that code.");
+    }
+    destination = link.url;
+    await redis.set(`link:${code}`, destination, "EX", CACHE_TTL_SECONDS);
   }
 
-  const updated = store.incrementClicks(req.params.code);
-  io.emit("linkClicked", { code: updated.code, clicks: updated.clicks });
-  res.redirect(link.url);
+  // The redirect happens immediately; logging the click is someone else's problem now.
+  await clicksQueue.add("record-click", { code });
+  res.redirect(destination);
 });
 
 server.listen(PORT, () => {

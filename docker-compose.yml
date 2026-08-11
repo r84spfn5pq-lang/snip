@@ -1,9 +1,30 @@
 services:
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
   app:
     build: .
     ports:
       - "4141:4141"
     env_file:
       - .env
+    environment:
+      - REDIS_URL=redis://redis:6379
     volumes:
       - ./data:/app/data
+    depends_on:
+      - redis
+
+  worker:
+    build: .
+    command: node worker.js
+    env_file:
+      - .env
+    environment:
+      - REDIS_URL=redis://redis:6379
+    volumes:
+      - ./data:/app/data
+    depends_on:
+      - redis

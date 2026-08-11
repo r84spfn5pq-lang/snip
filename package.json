@@ -11,8 +11,10 @@
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",
+    "bullmq": "^6.0.11",
     "dotenv": "^17.4.2",
     "express": "^4.19.2",
+    "ioredis": "^6.0.0",
     "jsonwebtoken": "^9.0.3",
     "socket.io": "^4.8.3"
   },
