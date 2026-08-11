@@ -12,7 +12,7 @@ Built as the flagship project for a software-job study plan — each phase below
 - [x] Phase 2 — CI running those tests on every push via GitHub Actions
 - [x] Phase 3 — containerized with Docker (`docker compose up`)
 - [x] Phase 4 — real accounts (bcryptjs + JWT), links tied to their owner
-- [ ] Phase 5 — live click counter via Socket.io
+- [x] Phase 5 — live click counter via Socket.io
 - [ ] Phase 6 — Redis caching on redirects + a background job queue for click logging
 - [ ] Phase 7 (optional) — semantic search over saved links
 

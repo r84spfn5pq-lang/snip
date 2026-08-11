@@ -2,6 +2,8 @@ require("dotenv").config();
 
 const express = require("express");
 const path = require("path");
+const http = require("http");
+const { Server } = require("socket.io");
 
 const { generateCode } = require("./lib/generateCode");
 const { isValidUrl } = require("./lib/isValidUrl");
@@ -11,6 +13,8 @@ const { hashPassword, comparePassword, signToken } = require("./lib/auth");
 const { requireAuth } = require("./lib/authMiddleware");
 
 const app = express();
+const server = http.createServer(app);
+const io = new Server(server);
 const PORT = process.env.PORT || 4141;
 
 app.use(express.json());
@@ -83,10 +87,11 @@ app.get("/:code", (req, res) => {
     return res.status(404).send("No link found for that code.");
   }
 
-  store.incrementClicks(req.params.code);
+  const updated = store.incrementClicks(req.params.code);
+  io.emit("linkClicked", { code: updated.code, clicks: updated.clicks });
   res.redirect(link.url);
 });
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Snip is running at http://localhost:${PORT}`);
 });

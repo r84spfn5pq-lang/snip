@@ -165,6 +165,18 @@ form.addEventListener("submit", async (e) => {
   await loadLinks();
 });
 
+const socket = io();
+
+socket.on("linkClicked", ({ code, clicks }) => {
+  const ticket = rack.querySelector(`.ticket[data-code="${code}"]`);
+  if (!ticket) return;
+
+  const clicksEl = ticket.querySelector(".ticket-clicks");
+  clicksEl.textContent = clicks;
+  clicksEl.classList.add("pulse");
+  setTimeout(() => clicksEl.classList.remove("pulse"), 400);
+});
+
 if (getToken()) {
   showApp();
 } else {
