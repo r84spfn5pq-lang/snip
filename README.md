@@ -10,7 +10,7 @@ Built as the flagship project for a software-job study plan — each phase below
 - [x] Phase 0 — skeleton: submit a URL, get a short code, redirect route, no auth yet
 - [x] Phase 1 — tests for the short-code generator and URL validator (`npm test`)
 - [x] Phase 2 — CI running those tests on every push via GitHub Actions
-- [ ] Phase 3 — Docker + docker-compose (app + Postgres + Redis) (needs Docker Desktop installed)
+- [x] Phase 3 — containerized with Docker (`docker compose up`)
 - [x] Phase 4 — real accounts (bcryptjs + JWT), links tied to their owner
 - [ ] Phase 5 — live click counter via Socket.io
 - [ ] Phase 6 — Redis caching on redirects + a background job queue for click logging
@@ -18,12 +18,18 @@ Built as the flagship project for a software-job study plan — each phase below
 
 ## Run it
 
+Locally:
 ```
 npm install
 npm start
 ```
 
-Then open http://localhost:4141
+Or in Docker:
+```
+docker compose up --build
+```
+
+Either way, open http://localhost:4141
 
 ## How it works right now
 

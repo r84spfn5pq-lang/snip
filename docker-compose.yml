@@ -1,0 +1,9 @@
+services:
+  app:
+    build: .
+    ports:
+      - "4141:4141"
+    env_file:
+      - .env
+    volumes:
+      - ./data:/app/data
