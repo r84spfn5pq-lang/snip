@@ -5,6 +5,8 @@ counts tick up as people use it.
 
 Built as the flagship project for a software-job study plan — each phase below adds one real piece.
 
+Image published to Docker Hub: [`letsstay/snip`](https://hub.docker.com/r/letsstay/snip)
+
 ## Status
 
 - [x] Phase 0 — skeleton: submit a URL, get a short code, redirect route, no auth yet
@@ -31,6 +33,10 @@ node worker.js   # in another
 ```
 
 Either way, open http://localhost:4141
+
+The app image alone is also public on Docker Hub (`docker pull letsstay/snip`), but it needs Redis and
+the worker alongside it to fully work — `docker compose up` is still the easiest way to run the whole
+thing with one command.
 
 ## How it works right now
 
