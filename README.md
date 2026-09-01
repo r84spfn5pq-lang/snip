@@ -1,5 +1,7 @@
 # Snip
 
+![Snip — a ticket-stub styled dashboard showing shortened links with live click counts](screenshot.png)
+
 A URL shortener with a live analytics dashboard. Paste a long URL, get a short one back, watch click
 counts tick up as people use it.
 
